@@ -123,4 +123,12 @@ public class Estudante {
     public boolean isAprovado(){
         return nota >= 6;
     }
+
+    public boolean porCurso(Curso curso){
+        return this.curso.equals(curso);
+    }
+
+    public boolean porSexo(char sexo){
+        return this.sexo == sexo;
+    }
 }

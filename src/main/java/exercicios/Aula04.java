@@ -49,26 +49,29 @@ public class Aula04 extends Aula {
 
     protected double maiorNotaCursoAndSexo(@NonNull final Stream<Estudante> stream, @NonNull final Curso curso, final char sexo) {
 
-        return streamNN(stream)
-                .filter(estudante -> estudante.getCurso().getNome().equals(curso.getNome()))
-                .filter(estudante -> estudante.getSexo() == sexo)
+        return stream
+                .filter(Estudante::hasCurso)
+                .filter(e -> e.porCurso(curso))
+                .filter(e -> e.porSexo(sexo))
                 .mapToDouble(Estudante::getNota)
                 .max()
                 .orElse(-1);
     }
 
     protected long totalEstudantesCursoAndSexo(@NonNull final Stream<Estudante> stream, @NonNull final Curso curso, final char sexo) {
-        return streamNN(stream)
-                .filter(estudante -> estudante.getCurso().getNome().equals(curso.getNome()))
-                .filter(estudante -> estudante.getSexo() == sexo)
+        return stream
+                .filter(Estudante::hasCurso)
+                .filter(e -> e.porCurso(curso))
+                .filter(e -> e.porSexo(sexo))
                 .map(Estudante::getNome)
                 .distinct()
                 .count();
     }
 
     protected double mediaNotaTodosEstudantesCurso(@NonNull final Stream<Estudante> stream, @NonNull final Curso curso){
-        return streamNN(stream)
-                .filter(estudante -> estudante.getCurso().getNome().equals(curso.getNome()))
+        return stream
+                .filter(Estudante::hasCurso)
+                .filter(e -> e.porCurso(curso))
                 .mapToDouble(Estudante::getNota)
                 .average()
                 .orElse(-1);
@@ -84,14 +87,10 @@ public class Aula04 extends Aula {
 
     protected double maiorNotaHomens(@NonNull final Stream<Estudante> stream){
         return stream
-                .filter(estudante -> estudante.getSexo() == 'M')
+                .filter(Estudante::isHomem)
                 .mapToDouble(Estudante::getNota)
                 .max()
                 .orElse(-1);
-    }
-    protected Stream<Estudante> streamNN(Stream<Estudante> stream){
-        return stream
-                .filter(estudante -> estudante.getCurso() != null);
     }
 }
 
