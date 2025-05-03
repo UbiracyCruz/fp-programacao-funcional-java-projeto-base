@@ -2,11 +2,14 @@ package exercicios;
 
 import exercicios.base.Aula;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
+import static java.util.Comparator.comparingDouble;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -42,6 +45,37 @@ public class Aula06 extends Aula {
      */
     public Aula06() {
         //TODO: Insira chamdas das funções existentes aqui, para você conferir como estão funcionando
+        System.out.println("Lista 1: Mulheres Aprovadas");
+        var lista1 = new ArrayList<>(getEstudantesMulheresAprovadas());
+        for (Estudante estudante : lista1) {
+            System.out.println(estudante);
+        }
+        System.out.println("Lista 2: Mulheres Aprovadas Ordenado Por Curso e Nota");
+        var lista2 = new ArrayList<>(getEstudantesMulheresAprovadasOrdenadasPorCursoAndNota());
+        for (Estudante estudante : lista2) {
+            System.out.println(estudante);
+        }
+        System.out.println("Lista 3: Mulheres Aprovadas Ordenado Por Curso Decescente e Nota Crescente");
+        var lista3 = new ArrayList<>(getEstudantesMulheresAprovadasOrdenadasPorCursoDecrescenteAndNotaCrescente());
+        for (Estudante estudante : lista3) {
+            System.out.println(estudante);
+        }
+        System.out.println("Lista 4: Mulheres Aprovadas Não modificavel");
+        var lista4 = new ArrayList<>(getEstudantesMulheresAprovadasNaoOrdenadasModificavel());
+        for (Estudante estudante : lista4) {
+            System.out.println(estudante);
+        }
+        System.out.println("Lista 5: Mulheres Aprovadas Ordenado Decrescente");
+        var lista5 = new ArrayList<>(getEstudantesMulheresAprovadasOrdenadasTotalmenteDecrescente());
+        for (Estudante estudante : lista5) {
+            System.out.println(estudante);
+        }
+        System.out.println("Lista 6: Mulheres Aprovadas Ordenado Por Curso Crescente e Nota Decrescente");
+        var lista6 = new ArrayList<>(getEstudantesMulheresAprovadasOrdenadasPorCursoCrescenteAndNotaDecrescente());
+        for (Estudante estudante : lista6) {
+            System.out.println(estudante);
+        }
+
     }
 
     /**
@@ -63,7 +97,7 @@ public class Aula06 extends Aula {
         return estudantes
                 .stream()
                 .filter(mulheresAprovadas)
-                .collect(toList());
+                .toList();
     }
 
     /**
@@ -73,12 +107,15 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasPorCursoAndNota() {
-        var filtro = comparing(Estudante::getCurso).thenComparing(Estudante::getNota);
+        var cursoAndNota =
+                comparing(Estudante::getCurso)
+                .thenComparingDouble(Estudante::getNota);
+
         return estudantes
                 .stream()
                 .filter(mulheresAprovadas)
-                .sorted(filtro)
-                .collect(toList());
+                .sorted(cursoAndNota)
+                .toList();
     }
 
     /**
@@ -88,8 +125,16 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasPorCursoDecrescenteAndNotaCrescente() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        var cursoDecrescenteAndNotaCrescente =
+                comparing(Estudante::getCurso)
+                .reversed()
+                .thenComparingDouble(Estudante::getNota);
+
+        return estudantes
+                .stream()
+                .filter(mulheresAprovadas)
+                .sorted(cursoDecrescenteAndNotaCrescente)
+                .toList();
     }
 
     /**
@@ -100,8 +145,10 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasNaoOrdenadasModificavel() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        return estudantes
+                .stream()
+                .filter(mulheresAprovadas)
+                .collect(toList());
     }
 
     /**
@@ -111,8 +158,16 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasTotalmenteDecrescente() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        var decrescente =
+                comparing(Estudante::getCurso)
+                .thenComparingDouble(Estudante::getNota)
+                .reversed();
+
+        return estudantes
+                .stream()
+                .filter(mulheresAprovadas)
+                .sorted(decrescente)
+                .toList();
     }
 
     /**
@@ -122,7 +177,17 @@ public class Aula06 extends Aula {
      * @return uma Lista <b>NÃO-MODIFICÁVEL</b> de estudantes selecionados pelo predicado {@link #mulheresAprovadas}
      */
     public List<Estudante> getEstudantesMulheresAprovadasOrdenadasPorCursoCrescenteAndNotaDecrescente() {
-        // TODO: Você precisa implementar este método. Apague estas linhas e escreva o código correto.
-        return null;
+        var ordemNota =
+                comparingDouble(Estudante::getNota)
+                .reversed();
+        var cursoCrescenteAndNotaDecrescente =
+                comparing(Estudante::getCurso)
+                .thenComparing(ordemNota);
+
+        return estudantes
+                .stream()
+                .filter(mulheresAprovadas)
+                .sorted(cursoCrescenteAndNotaDecrescente)
+                .toList();
     }
 }
